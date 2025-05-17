@@ -38,9 +38,23 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
 
-            {/* Admin & Staff routes */}
+            {/* Admin routes */}
             <Route path="/dashboard" element={
-              <ProtectedRoute allowedRoles={["admin", "frontOffice", "backOffice", "clinicalStaff"]}>
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+
+            {/* Staff routes */}
+            <Route path="/staff-dashboard" element={
+              <ProtectedRoute allowedRoles={["frontOffice", "backOffice"]}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            
+            {/* Clinical Staff routes */}
+            <Route path="/provider-dashboard" element={
+              <ProtectedRoute allowedRoles={["clinicalStaff"]}>
                 <Dashboard />
               </ProtectedRoute>
             } />

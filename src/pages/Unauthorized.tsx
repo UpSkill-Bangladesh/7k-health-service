@@ -12,6 +12,10 @@ const Unauthorized = () => {
   const handleGoBack = () => {
     if (user?.role === 'patient') {
       navigate('/patient-dashboard');
+    } else if (user?.role === 'clinicalStaff') {
+      navigate('/provider-dashboard');
+    } else if (user?.role === 'frontOffice' || user?.role === 'backOffice') {
+      navigate('/staff-dashboard');
     } else if (user?.role === 'admin') {
       navigate('/dashboard');
     } else {
@@ -29,8 +33,8 @@ const Unauthorized = () => {
         <h1 className="mb-4 text-2xl font-bold text-gray-900">Access Denied</h1>
         <p className="mb-8 text-gray-600">
           You don't have permission to access this page. Your current role ({user?.role}) 
-          doesn't have the necessary privileges. Please contact your administrator 
-          if you believe this is an error.
+          doesn't have the necessary privileges. This restriction is in place to ensure 
+          HIPAA compliance and data security.
         </p>
         
         <div className="flex flex-col md:flex-row gap-4 justify-center">

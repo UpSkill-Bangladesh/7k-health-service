@@ -10,6 +10,8 @@ interface User {
   email: string;
   role: UserRole;
   facilityId?: string;
+  specialization?: string;  // For clinical staff
+  lastLoginTime?: Date;     // For audit purposes
 }
 
 interface AuthContextType {
@@ -25,11 +27,40 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Mock users for demo purposes - in a real app, this would be authenticated against a backend
 const mockUsers: User[] = [
-  { id: "1", name: "Admin User", email: "admin@healthprovider.com", role: "admin" },
-  { id: "2", name: "Front Office Staff", email: "frontoffice@healthprovider.com", role: "frontOffice" },
-  { id: "3", name: "Back Office Staff", email: "backoffice@healthprovider.com", role: "backOffice" },
-  { id: "4", name: "Dr. Smith", email: "doctor@healthprovider.com", role: "clinicalStaff" },
-  { id: "5", name: "John Patient", email: "patient@example.com", role: "patient" },
+  { 
+    id: "1", 
+    name: "Admin User", 
+    email: "admin@healthprovider.com", 
+    role: "admin" 
+  },
+  { 
+    id: "2", 
+    name: "Front Office Staff", 
+    email: "frontoffice@healthprovider.com", 
+    role: "frontOffice",
+    facilityId: "facility-001"
+  },
+  { 
+    id: "3", 
+    name: "Back Office Staff", 
+    email: "backoffice@healthprovider.com", 
+    role: "backOffice",
+    facilityId: "facility-001"
+  },
+  { 
+    id: "4", 
+    name: "Dr. Smith", 
+    email: "doctor@healthprovider.com", 
+    role: "clinicalStaff",
+    facilityId: "facility-001",
+    specialization: "Cardiology"
+  },
+  { 
+    id: "5", 
+    name: "John Patient", 
+    email: "patient@example.com", 
+    role: "patient" 
+  },
 ];
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -61,12 +92,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // In a real app, we would validate the password here
       // For demo purposes, we'll accept any password
       
-      setUser(foundUser);
-      localStorage.setItem("healthcareUser", JSON.stringify(foundUser));
+      // Update last login time for audit purposes
+      const userWithLogin = {
+        ...foundUser,
+        lastLoginTime: new Date()
+      };
+      
+      setUser(userWithLogin);
+      localStorage.setItem("healthcareUser", JSON.stringify(userWithLogin));
+      
+      // Audit login event (in a real app, this would be sent to server)
+      console.log(`[AUDIT] User ${userWithLogin.id} (${userWithLogin.role}) logged in at ${new Date().toISOString()}`);
       
       // Redirect based on role
-      if (foundUser.role === "patient") {
+      if (userWithLogin.role === "patient") {
         navigate("/patient-dashboard");
+      } else if (userWithLogin.role === "clinicalStaff") {
+        navigate("/provider-dashboard");
+      } else if (userWithLogin.role === "frontOffice" || userWithLogin.role === "backOffice") {
+        navigate("/staff-dashboard");
       } else {
         navigate("/dashboard");
       }
@@ -79,6 +123,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
+    // Audit logout event (in a real app, this would be sent to server)
+    if (user) {
+      console.log(`[AUDIT] User ${user.id} (${user.role}) logged out at ${new Date().toISOString()}`);
+    }
+    
     setUser(null);
     localStorage.removeItem("healthcareUser");
     navigate("/login");

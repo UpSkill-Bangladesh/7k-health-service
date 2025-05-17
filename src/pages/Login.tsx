@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { Shield, Info } from "lucide-react";
+import { Shield, Info, Lock } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -78,15 +78,20 @@ const Login: React.FC = () => {
           </div>
           <h1 className="text-3xl font-bold mt-4 text-healthcare-dark">HealthProvide</h1>
           <p className="text-gray-600 mt-2">Healthcare Service Provider Platform</p>
-          <Badge variant="outline" className="mt-2 bg-green-50 text-green-800 border-green-200">
-            HIPAA Compliant
-          </Badge>
+          <div className="flex justify-center gap-2 mt-2">
+            <Badge variant="outline" className="bg-green-50 text-green-800 border-green-200">
+              HIPAA Compliant
+            </Badge>
+            <Badge variant="outline" className="bg-blue-50 text-blue-800 border-blue-200">
+              NY • NJ • PA
+            </Badge>
+          </div>
         </div>
 
         <Card className="shadow-lg border-t-4 border-t-healthcare-primary">
           <CardHeader>
             <CardTitle className="text-2xl font-semibold text-center text-healthcare-dark">
-              Sign In
+              Secure Sign In
             </CardTitle>
             <CardDescription className="text-center">
               Access your secure healthcare portal
@@ -163,7 +168,10 @@ const Login: React.FC = () => {
           </CardContent>
 
           <CardFooter className="flex flex-col space-y-2 text-center text-xs text-gray-500">
-            <p>This system is for authorized personnel only</p>
+            <div className="flex items-center justify-center gap-1">
+              <Lock className="h-3 w-3" />
+              <p>This system is for authorized personnel only</p>
+            </div>
             <p>All activity is monitored and recorded for compliance purposes</p>
             <p className="text-xs">HIPAA Compliant • Secure • {new Date().getFullYear()} © HealthProvide</p>
           </CardFooter>
