@@ -3,14 +3,17 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '../contexts/AuthContext';
+import { Shield, AlertCircle } from 'lucide-react';
 
 const Unauthorized = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleGoBack = () => {
     if (user?.role === 'patient') {
       navigate('/patient-dashboard');
+    } else if (user?.role === 'admin') {
+      navigate('/dashboard');
     } else {
       navigate('/dashboard');
     }
@@ -18,21 +21,31 @@ const Unauthorized = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-healthcare-light">
-      <div className="mx-auto max-w-md text-center">
+      <div className="mx-auto max-w-md text-center p-6 bg-white rounded-xl shadow-lg">
         <div className="mb-6 rounded-full bg-red-100 p-6 text-red-500 inline-block">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
+          <AlertCircle className="h-12 w-12" />
         </div>
         
         <h1 className="mb-4 text-2xl font-bold text-gray-900">Access Denied</h1>
         <p className="mb-8 text-gray-600">
-          You don't have permission to access this page. Please contact your administrator if you believe this is an error.
+          You don't have permission to access this page. Your current role ({user?.role}) 
+          doesn't have the necessary privileges. Please contact your administrator 
+          if you believe this is an error.
         </p>
         
-        <Button onClick={handleGoBack} className="bg-healthcare-primary hover:bg-healthcare-accent">
-          Return to Dashboard
-        </Button>
+        <div className="flex flex-col md:flex-row gap-4 justify-center">
+          <Button onClick={handleGoBack} className="bg-healthcare-primary hover:bg-healthcare-accent">
+            Return to Dashboard
+          </Button>
+          <Button onClick={() => navigate('/login')} variant="outline" className="border-healthcare-primary text-healthcare-primary">
+            Switch Account
+          </Button>
+        </div>
+
+        <div className="mt-8 p-4 border border-gray-200 rounded-lg bg-gray-50 text-sm text-gray-500 flex items-center justify-center">
+          <Shield className="h-5 w-5 mr-2 text-healthcare-primary" />
+          <span>This application enforces role-based access control for HIPAA compliance</span>
+        </div>
       </div>
     </div>
   );
