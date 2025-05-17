@@ -1,0 +1,86 @@
+
+import React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+interface Provider {
+  id: string;
+  name: string;
+  specialty: string;
+  availableDays: number[];
+}
+
+interface ProviderSelectorProps {
+  providers: Provider[];
+  selectedProvider: string;
+  onSelectProvider: (providerId: string) => void;
+}
+
+const ProviderSelector: React.FC<ProviderSelectorProps> = ({
+  providers,
+  selectedProvider,
+  onSelectProvider,
+}) => {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full justify-between"
+        >
+          {selectedProvider
+            ? providers.find((provider) => provider.id === selectedProvider)?.name
+            : "Select provider..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-full p-0">
+        <Command>
+          <CommandInput placeholder="Search providers..." className="h-9" />
+          <CommandEmpty>No provider found.</CommandEmpty>
+          <CommandGroup>
+            {providers.map((provider) => (
+              <CommandItem
+                key={provider.id}
+                onSelect={() => {
+                  onSelectProvider(provider.id);
+                  setOpen(false);
+                }}
+                className="flex flex-col items-start"
+              >
+                <div className="flex w-full items-center justify-between">
+                  <span>{provider.name}</span>
+                  {selectedProvider === provider.id && (
+                    <Check className="h-4 w-4" />
+                  )}
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  {provider.specialty}
+                </span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+export default ProviderSelector;

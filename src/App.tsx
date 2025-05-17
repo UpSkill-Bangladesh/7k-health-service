@@ -12,6 +12,9 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import PatientDashboard from "./pages/PatientDashboard";
 import Appointments from "./pages/Appointments";
+import AppointmentScheduling from "./pages/AppointmentScheduling";
+import PatientRegistration from "./pages/PatientRegistration";
+import PatientBilling from "./pages/PatientBilling";
 import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
 
@@ -62,6 +65,24 @@ const App = () => (
             <Route path="/appointments" element={
               <ProtectedRoute allowedRoles={["admin", "frontOffice", "clinicalStaff"]}>
                 <Appointments />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/appointment-scheduling" element={
+              <ProtectedRoute allowedRoles={["admin", "frontOffice", "clinicalStaff", "patient"]}>
+                <AppointmentScheduling />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/patient-registration" element={
+              <ProtectedRoute allowedRoles={["admin", "frontOffice", "patient"]}>
+                <PatientRegistration />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/patient-billing" element={
+              <ProtectedRoute allowedRoles={["admin", "frontOffice", "backOffice", "patient"]}>
+                <PatientBilling />
               </ProtectedRoute>
             } />
 
