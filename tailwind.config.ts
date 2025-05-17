@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Healthcare-specific colors
+				healthcare: {
+					primary: '#1E88E5', // Main blue
+					secondary: '#42A5F5', // Lighter blue
+					accent: '#0D47A1', // Dark blue
+					success: '#4CAF50', // Green for success/confirmation
+					warning: '#FF9800', // Orange for warnings
+					danger: '#F44336', // Red for errors/alerts
+					light: '#F5F9FF', // Very light blue for backgrounds
+					dark: '#0A1929', // Very dark blue for text
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
