@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Clock } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -16,29 +16,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export interface Provider {
+export interface AppointmentType {
   id: string;
   name: string;
-  specialty: string;
-  availableDays: number[];
-  location?: string;
+  duration: number; // in minutes
+  description: string;
 }
 
-interface ProviderSelectorProps {
-  providers: Provider[];
-  selectedProvider: string;
-  onSelectProvider: (providerId: string) => void;
+interface AppointmentTypeSelectorProps {
+  appointmentTypes: AppointmentType[];
+  selectedType: string;
+  onSelectType: (typeId: string) => void;
 }
 
-const ProviderSelector: React.FC<ProviderSelectorProps> = ({
-  providers = [], // Default to empty array if undefined
-  selectedProvider,
-  onSelectProvider,
+const AppointmentTypeSelector: React.FC<AppointmentTypeSelectorProps> = ({
+  appointmentTypes = [],
+  selectedType,
+  onSelectType,
 }) => {
   const [open, setOpen] = React.useState(false);
-
-  // Ensure providers is always an array
-  const safeProviders = Array.isArray(providers) ? providers : [];
+  
+  // Ensure appointmentTypes is always an array
+  const safeTypes = Array.isArray(appointmentTypes) ? appointmentTypes : [];
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -49,35 +48,38 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {selectedProvider
-            ? safeProviders.find((provider) => provider.id === selectedProvider)?.name || "Unknown provider"
-            : "Select provider..."}
+          <div className="flex items-center">
+            <Clock className="mr-2 h-4 w-4" />
+            {selectedType
+              ? safeTypes.find((type) => type.id === selectedType)?.name || "Unknown type"
+              : "Select appointment type..."}
+          </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Search providers..." className="h-9" />
-          <CommandEmpty>No provider found.</CommandEmpty>
+          <CommandInput placeholder="Search appointment types..." className="h-9" />
+          <CommandEmpty>No appointment type found.</CommandEmpty>
           <CommandGroup>
-            {safeProviders.map((provider) => (
+            {safeTypes.map((type) => (
               <CommandItem
-                key={provider.id}
+                key={type.id}
                 onSelect={() => {
-                  onSelectProvider(provider.id);
+                  onSelectType(type.id);
                   setOpen(false);
                 }}
                 className="flex flex-col items-start"
               >
                 <div className="flex w-full items-center justify-between">
-                  <span>{provider.name}</span>
-                  {selectedProvider === provider.id && (
+                  <span>{type.name}</span>
+                  {selectedType === type.id && (
                     <Check className="h-4 w-4" />
                   )}
                 </div>
                 <div className="flex flex-col text-xs text-muted-foreground">
-                  <span>{provider.specialty}</span>
-                  {provider.location && <span>Location: {provider.location}</span>}
+                  <span>{type.duration} minutes</span>
+                  <span>{type.description}</span>
                 </div>
               </CommandItem>
             ))}
@@ -88,4 +90,4 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
   );
 };
 
-export default ProviderSelector;
+export default AppointmentTypeSelector;
