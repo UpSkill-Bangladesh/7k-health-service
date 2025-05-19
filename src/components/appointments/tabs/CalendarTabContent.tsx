@@ -5,6 +5,7 @@ import NoShowPrediction from "@/components/appointments/NoShowPrediction";
 import { Provider } from "@/components/appointments/ProviderSelector";
 import { Location } from "@/components/appointments/LocationSelector";
 import { AppointmentType } from "@/components/appointments/AppointmentTypeSelector";
+import { Patient } from "@/components/appointments/PatientSelector";
 
 interface CalendarTabContentProps {
   mockProviders: Provider[];
@@ -31,6 +32,7 @@ interface CalendarTabContentProps {
   getAvailableTimeSlots: () => string[];
   setCalendarIntegrationOpen: (open: boolean) => void;
   user: any;
+  selectedPatient?: Patient | null;
 }
 
 const CalendarTabContent: React.FC<CalendarTabContentProps> = (props) => {

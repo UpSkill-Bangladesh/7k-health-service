@@ -101,11 +101,11 @@ const App = () => {
                 {/* Redirect /patients to the appropriate page based on user role */}
                 <Route path="/patients" element={
                   <ProtectedRoute>
-                    {({ user }) => (
-                      user?.role === "admin" ? 
+                    {({ user }) => {
+                      return user?.role === "admin" ? 
                         <Navigate to="/admin/patients" replace /> : 
-                        <Navigate to="/patient-dashboard" replace />
-                    )}
+                        <Navigate to="/patient-dashboard" replace />;
+                    }}
                   </ProtectedRoute>
                 } />
                 

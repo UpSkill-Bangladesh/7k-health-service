@@ -70,13 +70,15 @@ const PatientSelector: React.FC<PatientSelectorProps> = ({
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
-          <CommandInput 
-            placeholder="Search patients..." 
-            value={searchQuery}
-            onValueChange={setSearchQuery}
-            className="h-9"
-            startIcon={<Search className="h-4 w-4" />}
-          />
+          <div className="flex items-center border-b px-3">
+            <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+            <CommandInput 
+              placeholder="Search patients..." 
+              value={searchQuery}
+              onValueChange={setSearchQuery}
+              className="h-9"
+            />
+          </div>
           <CommandEmpty>No patient found.</CommandEmpty>
           <CommandGroup className="max-h-[300px] overflow-auto">
             {filteredPatients.map((patient) => (
