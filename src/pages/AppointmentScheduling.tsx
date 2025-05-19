@@ -191,7 +191,7 @@ const AppointmentScheduling: React.FC = () => {
                   user={user}
                 />
               </div>
-              {(user?.role === "admin" || user?.role === "clinicalStaff") && (
+              {(user?.role === "admin" || user?.role === "doctor") && (
                 <div className="lg:col-span-1">
                   <NoShowPrediction />
                 </div>

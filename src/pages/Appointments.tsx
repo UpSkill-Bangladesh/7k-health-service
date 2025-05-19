@@ -74,7 +74,7 @@ const Appointments: React.FC = () => {
           <p className="text-gray-600">Manage patient appointments and scheduling</p>
         </div>
         <div className="flex space-x-2">
-          {(user?.role === "admin" || user?.role === "clinicalStaff") && (
+          {(user?.role === "admin" || user?.role === "doctor") && (
             <Button 
               variant="outline" 
               className={showPredictions ? "bg-healthcare-accent text-white" : ""}

@@ -104,7 +104,7 @@ const AppointmentCalendarView: React.FC<AppointmentCalendarViewProps> = ({
           </div>
 
           {/* Calendar Integration Button */}
-          {(user?.role === "admin" || user?.role === "clinicalStaff") && (
+          {(user?.role === "admin" || user?.role === "doctor") && (
             <div className="pt-2">
               <Button 
                 variant="outline" 
