@@ -61,7 +61,7 @@ const NavigationBar: React.FC = () => {
         </div>
         
         <div className="flex items-center">
-          <div className="text-2xl font-bold text-healthcare-primary">HealthProvide</div>
+          <div className="text-2xl font-bold text-healthcare-primary">Healthcare360</div>
         </div>
       </div>
     </div>
