@@ -1,20 +1,14 @@
 
 import React from "react";
-import { Check, ChevronsUpDown, Users } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Check, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export interface Provider {
   id: string;
@@ -35,8 +29,6 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
   selectedProvider,
   onSelectProvider,
 }) => {
-  const [open, setOpen] = React.useState(false);
-  
   // Ensure providers is always an array
   const safeProviders = Array.isArray(providers) ? providers : [];
 
@@ -64,49 +56,42 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          role="combobox"
-          aria-expanded={open}
           className="w-full justify-between"
           data-testid="provider-selector-button"
         >
-          {selectedProviderName || "Select provider..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <span className="flex-1 text-left">
+            {selectedProviderName || "Select provider..."}
+          </span>
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
-        <Command>
-          <CommandInput placeholder="Search providers..." className="h-9" />
-          <CommandEmpty>No provider found.</CommandEmpty>
-          <CommandGroup>
-            {safeProviders.map((provider) => (
-              <CommandItem
-                key={provider.id}
-                onSelect={() => {
-                  onSelectProvider(provider.id);
-                  setOpen(false);
-                }}
-                className="flex flex-col items-start"
-              >
-                <div className="flex w-full items-center justify-between">
-                  <span>{provider.name}</span>
-                  {selectedProvider === provider.id && (
-                    <Check className="h-4 w-4" />
-                  )}
-                </div>
-                <div className="flex flex-col text-xs text-muted-foreground">
-                  <span>{provider.specialty}</span>
-                  {provider.location && <span>Location: {provider.location}</span>}
-                </div>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-full max-h-[300px] overflow-y-auto">
+        {safeProviders.map((provider) => (
+          <DropdownMenuItem
+            key={provider.id}
+            className={cn(
+              "flex flex-col items-start py-2",
+              selectedProvider === provider.id && "bg-accent"
+            )}
+            onClick={() => onSelectProvider(provider.id)}
+          >
+            <div className="flex w-full items-center justify-between">
+              <span>{provider.name}</span>
+              {selectedProvider === provider.id && (
+                <Check className="h-4 w-4" />
+              )}
+            </div>
+            <div className="flex flex-col text-xs text-muted-foreground">
+              <span>{provider.specialty}</span>
+              {provider.location && <span>Location: {provider.location}</span>}
+            </div>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

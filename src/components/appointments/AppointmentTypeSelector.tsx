@@ -1,20 +1,14 @@
 
 import React from "react";
-import { Check, ChevronsUpDown, Calendar } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Check, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export interface AppointmentType {
   id: string;
@@ -34,8 +28,6 @@ const AppointmentTypeSelector: React.FC<AppointmentTypeSelectorProps> = ({
   selectedType,
   onSelectType,
 }) => {
-  const [open, setOpen] = React.useState(false);
-  
   // Ensure appointmentTypes is always an array
   const safeAppointmentTypes = Array.isArray(appointmentTypes) ? appointmentTypes : [];
 
@@ -63,47 +55,40 @@ const AppointmentTypeSelector: React.FC<AppointmentTypeSelectorProps> = ({
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          role="combobox"
-          aria-expanded={open}
           className="w-full justify-between"
           data-testid="appointment-type-selector-button"
         >
-          {selectedTypeName || "Select appointment type..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <span className="flex-1 text-left">
+            {selectedTypeName || "Select appointment type..."}
+          </span>
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
-        <Command>
-          <CommandInput placeholder="Search appointment types..." className="h-9" />
-          <CommandEmpty>No appointment type found.</CommandEmpty>
-          <CommandGroup>
-            {safeAppointmentTypes.map((type) => (
-              <CommandItem
-                key={type.id}
-                onSelect={() => {
-                  onSelectType(type.id);
-                  setOpen(false);
-                }}
-                className="flex flex-col items-start"
-              >
-                <div className="flex w-full items-center justify-between">
-                  <span>{type.name}</span>
-                  {selectedType === type.id && (
-                    <Check className="h-4 w-4" />
-                  )}
-                </div>
-                <span className="text-xs text-muted-foreground">{type.description}</span>
-                <span className="text-xs text-muted-foreground">Duration: {type.duration} minutes</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-full max-h-[300px] overflow-y-auto">
+        {safeAppointmentTypes.map((type) => (
+          <DropdownMenuItem
+            key={type.id}
+            className={cn(
+              "flex flex-col items-start py-2",
+              selectedType === type.id && "bg-accent"
+            )}
+            onClick={() => onSelectType(type.id)}
+          >
+            <div className="flex w-full items-center justify-between">
+              <span>{type.name}</span>
+              {selectedType === type.id && (
+                <Check className="h-4 w-4" />
+              )}
+            </div>
+            <span className="text-xs text-muted-foreground">{type.description}</span>
+            <span className="text-xs text-muted-foreground">Duration: {type.duration} minutes</span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
