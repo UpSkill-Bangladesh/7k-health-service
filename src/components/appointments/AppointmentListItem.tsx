@@ -6,6 +6,7 @@ import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 import { Provider } from "./ProviderSelector";
 import { Location } from "./LocationSelector";
 import { AppointmentType } from "./AppointmentTypeSelector";
+import AppointmentCollapsibleContent from "./AppointmentCollapsibleContent";
 
 interface Appointment {
   id: string;
@@ -71,25 +72,12 @@ const AppointmentListItem: React.FC<AppointmentListItemProps> = ({
         </div>
       </div>
       
-      <CollapsibleContent className="pt-4 space-y-2">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <h4 className="text-sm font-medium">Location</h4>
-            <p className="text-sm text-muted-foreground">{location?.name}</p>
-            <p className="text-xs text-muted-foreground">{location?.address}</p>
-          </div>
-          <div>
-            <h4 className="text-sm font-medium">Appointment Type</h4>
-            <p className="text-sm text-muted-foreground">{appointmentType?.name}</p>
-            <p className="text-xs text-muted-foreground">{appointmentType?.description}</p>
-          </div>
-          {appointment.notes && (
-            <div className="col-span-2">
-              <h4 className="text-sm font-medium">Notes</h4>
-              <p className="text-sm text-muted-foreground">{appointment.notes}</p>
-            </div>
-          )}
-        </div>
+      <CollapsibleContent>
+        <AppointmentCollapsibleContent 
+          location={location}
+          appointmentType={appointmentType}
+          notes={appointment.notes}
+        />
       </CollapsibleContent>
     </Collapsible>
   );
