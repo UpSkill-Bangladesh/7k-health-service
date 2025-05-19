@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardLayout from "../components/layouts/DashboardLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -33,6 +33,21 @@ const AppointmentScheduling: React.FC = () => {
   const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);
   const [selectedAppointmentToReschedule, setSelectedAppointmentToReschedule] = useState<string | null>(null);
   const [calendarIntegrationOpen, setCalendarIntegrationOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("calendar");
+
+  // Set defaults based on user role
+  useEffect(() => {
+    if (user?.role === "doctor") {
+      // Pre-select the logged-in doctor for doctor users
+      const doctorProvider = mockProviders.find(p => p.id === user.id);
+      if (doctorProvider) {
+        setSelectedProvider(doctorProvider.id);
+      }
+    } else if (user?.role === "patient") {
+      // For patients, we default to calendar view to let them book
+      setActiveTab("calendar");
+    }
+  }, [user]);
 
   // Filter available dates based on provider availability
   const getDisabledDays = () => {
@@ -144,21 +159,52 @@ const AppointmentScheduling: React.FC = () => {
   const myAppointments = mockBookedAppointments.filter(appointment => {
     if (user?.role === "patient") {
       return appointment.patientId === user.id;
+    } else if (user?.role === "doctor") {
+      return appointment.providerId === user.id;
     } else {
-      return true; // Staff can see all appointments
+      return true; // Admin can see all appointments
     }
   });
+
+  // Determine which tabs should be available based on role
+  const getAvailableTabs = () => {
+    if (user?.role === "admin") {
+      return ["calendar", "list", "history"];
+    } else if (user?.role === "doctor") {
+      return ["calendar", "list"];
+    } else {
+      return ["calendar", "history"];
+    }
+  };
+
+  const availableTabs = getAvailableTabs();
 
   return (
     <DashboardLayout>
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold text-healthcare-primary mb-6">Appointment Scheduling</h1>
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-healthcare-primary to-healthcare-accent bg-clip-text text-transparent mb-6">
+          {user?.role === "admin" ? "Appointment Management" :
+           user?.role === "doctor" ? "My Schedule" :
+           "Schedule an Appointment"}
+        </h1>
         
-        <Tabs defaultValue="calendar" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="calendar">Calendar View</TabsTrigger>
-            <TabsTrigger value="list">List View</TabsTrigger>
-            <TabsTrigger value="history">Appointment History</TabsTrigger>
+            {availableTabs.includes("calendar") && (
+              <TabsTrigger value="calendar" className="data-[state=active]:bg-healthcare-primary data-[state=active]:text-white">
+                Calendar View
+              </TabsTrigger>
+            )}
+            {availableTabs.includes("list") && (
+              <TabsTrigger value="list" className="data-[state=active]:bg-healthcare-primary data-[state=active]:text-white">
+                List View
+              </TabsTrigger>
+            )}
+            {availableTabs.includes("history") && (
+              <TabsTrigger value="history" className="data-[state=active]:bg-healthcare-primary data-[state=active]:text-white">
+                Appointment History
+              </TabsTrigger>
+            )}
           </TabsList>
           
           <TabsContent value="calendar" className="space-y-6">
