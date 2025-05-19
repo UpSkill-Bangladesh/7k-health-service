@@ -9,6 +9,10 @@ export const mockProviders: Provider[] = [
   { id: "2", name: "Dr. Emily Brown", specialty: "Neurology", location: "North Clinic", availableDays: [2, 3, 4] },
   { id: "3", name: "Dr. Maria Rodriguez", specialty: "Family Medicine", location: "South Clinic", availableDays: [0, 4, 5] },
   { id: "4", name: "Dr. Robert Johnson", specialty: "Dermatology", location: "West Medical Center", availableDays: [1, 3, 5] },
+  { id: "5", name: "Dr. Sarah Wilson", specialty: "Pediatrics", location: "Children's Hospital", availableDays: [0, 1, 4] },
+  { id: "6", name: "Dr. Michael Chen", specialty: "Orthopedics", location: "Sports Medicine Center", availableDays: [2, 3, 5] },
+  { id: "7", name: "Dr. Olivia Taylor", specialty: "Obstetrics & Gynecology", location: "Women's Health Center", availableDays: [1, 2, 4] },
+  { id: "8", name: "Dr. David Garcia", specialty: "Psychiatry", location: "Mental Health Clinic", availableDays: [0, 3, 5] },
 ];
 
 // Mock data for locations
@@ -17,6 +21,10 @@ export const mockLocations: Location[] = [
   { id: "2", name: "North Clinic", address: "456 North Avenue, Townsville" },
   { id: "3", name: "South Clinic", address: "789 South Boulevard, Villageton" },
   { id: "4", name: "West Medical Center", address: "321 West Road, Boroughford" },
+  { id: "5", name: "Children's Hospital", address: "555 Pediatric Lane, Kidstown" },
+  { id: "6", name: "Sports Medicine Center", address: "777 Athletic Drive, Sportsville" },
+  { id: "7", name: "Women's Health Center", address: "888 Wellness Way, Careville" },
+  { id: "8", name: "Mental Health Clinic", address: "999 Mindful Street, Peacetown" },
 ];
 
 // Mock data for appointment types
@@ -26,6 +34,11 @@ export const mockAppointmentTypes: AppointmentType[] = [
   { id: "3", name: "Annual Exam", duration: 45, description: "Yearly comprehensive examination" },
   { id: "4", name: "Urgent Care", duration: 30, description: "Immediate care for non-emergency issues" },
   { id: "5", name: "Specialist Consultation", duration: 60, description: "Consultation with a specialist" },
+  { id: "6", name: "Vaccination", duration: 15, description: "Quick appointment for vaccinations" },
+  { id: "7", name: "Physical Therapy", duration: 45, description: "Rehabilitation and physical therapy session" },
+  { id: "8", name: "Telehealth Consultation", duration: 30, description: "Virtual appointment via video call" },
+  { id: "9", name: "Mental Health Session", duration: 50, description: "Counseling or therapy session" },
+  { id: "10", name: "Prenatal Check-up", duration: 40, description: "Regular monitoring for expectant mothers" },
 ];
 
 // Mock data for available time slots
