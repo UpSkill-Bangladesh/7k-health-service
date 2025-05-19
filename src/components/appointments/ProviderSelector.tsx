@@ -30,11 +30,14 @@ interface ProviderSelectorProps {
 }
 
 const ProviderSelector: React.FC<ProviderSelectorProps> = ({
-  providers,
+  providers = [], // Default to empty array if undefined
   selectedProvider,
   onSelectProvider,
 }) => {
   const [open, setOpen] = React.useState(false);
+
+  // Ensure providers is always an array
+  const safeProviders = Array.isArray(providers) ? providers : [];
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -46,7 +49,7 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
           className="w-full justify-between"
         >
           {selectedProvider
-            ? providers.find((provider) => provider.id === selectedProvider)?.name
+            ? safeProviders.find((provider) => provider.id === selectedProvider)?.name || "Unknown provider"
             : "Select provider..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -56,7 +59,7 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
           <CommandInput placeholder="Search providers..." className="h-9" />
           <CommandEmpty>No provider found.</CommandEmpty>
           <CommandGroup>
-            {providers.map((provider) => (
+            {safeProviders.map((provider) => (
               <CommandItem
                 key={provider.id}
                 onSelect={() => {

@@ -92,6 +92,9 @@ const App = () => (
                 <PatientDashboard />
               </ProtectedRoute>
             } />
+            
+            {/* Redirect /patients to the appropriate page based on user role */}
+            <Route path="/patients" element={<Navigate to="/patient-dashboard" replace />} />
 
             {/* Home route redirects based on role */}
             <Route path="/" element={<Navigate to="/login" replace />} />
