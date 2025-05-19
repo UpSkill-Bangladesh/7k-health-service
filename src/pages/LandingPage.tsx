@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import NavigationBar from "@/components/landing/NavigationBar";
 import HeroSection from "@/components/landing/HeroSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import HowItWorksSection from "@/components/landing/HowItWorksSection";
@@ -34,7 +35,8 @@ const LandingPage: React.FC = () => {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-healthcare-light">
+    <div className="min-h-screen bg-gradient-to-b from-white to-blue-50">
+      <NavigationBar />
       <HeroSection />
       <FeaturesSection />
       <HowItWorksSection />
