@@ -1,20 +1,8 @@
 
 import React from "react";
-import { Check, ChevronsUpDown, MapPin } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { MapPin } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export interface Location {
   id: string;
@@ -33,56 +21,44 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
   selectedLocation,
   onSelectLocation,
 }) => {
-  const [open, setOpen] = React.useState(false);
-  
-  // Ensure locations is always an array
-  const safeLocations = Array.isArray(locations) ? locations : [];
+  // Get the currently selected location (if any)
+  const currentLocation = React.useMemo(() => {
+    return locations.find(location => location.id === selectedLocation);
+  }, [locations, selectedLocation]);
+
+  // Handle text input change
+  const handleLocationInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    
+    // If the input matches a location name, select it
+    const matchedLocation = locations.find(loc => 
+      loc.name.toLowerCase() === inputValue.toLowerCase()
+    );
+    
+    if (matchedLocation) {
+      onSelectLocation(matchedLocation.id);
+    } else if (inputValue.trim() === "") {
+      // Clear selection if input is empty
+      onSelectLocation("");
+    }
+  };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between"
-        >
-          <div className="flex items-center">
-            <MapPin className="mr-2 h-4 w-4" />
-            {selectedLocation
-              ? safeLocations.find((location) => location.id === selectedLocation)?.name || "Unknown location"
-              : "Select location..."}
-          </div>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
-        <Command>
-          <CommandInput placeholder="Search locations..." className="h-9" />
-          <CommandEmpty>No location found.</CommandEmpty>
-          <CommandGroup>
-            {safeLocations.map((location) => (
-              <CommandItem
-                key={location.id}
-                onSelect={() => {
-                  onSelectLocation(location.id);
-                  setOpen(false);
-                }}
-                className="flex flex-col items-start"
-              >
-                <div className="flex w-full items-center justify-between">
-                  <span>{location.name}</span>
-                  {selectedLocation === location.id && (
-                    <Check className="h-4 w-4" />
-                  )}
-                </div>
-                <span className="text-xs text-muted-foreground">{location.address}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <div className="space-y-2">
+      <div className="flex items-center">
+        <MapPin className="mr-2 h-4 w-4" />
+        <Input
+          type="text"
+          placeholder="Enter location..."
+          value={currentLocation?.name || ""}
+          onChange={handleLocationInputChange}
+          className="w-full"
+        />
+      </div>
+      {currentLocation?.address && (
+        <p className="text-xs text-muted-foreground ml-6">{currentLocation.address}</p>
+      )}
+    </div>
   );
 };
 

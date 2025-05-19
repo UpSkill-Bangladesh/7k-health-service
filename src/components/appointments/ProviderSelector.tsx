@@ -36,7 +36,7 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
   onSelectProvider,
 }) => {
   const [open, setOpen] = React.useState(false);
-
+  
   // Ensure providers is always an array
   const safeProviders = Array.isArray(providers) ? providers : [];
 
