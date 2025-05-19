@@ -24,7 +24,7 @@ export interface AppointmentType {
 }
 
 interface AppointmentTypeSelectorProps {
-  appointmentTypes: AppointmentType[];
+  appointmentTypes?: AppointmentType[];
   selectedType: string;
   onSelectType: (typeId: string) => void;
 }
@@ -37,7 +37,10 @@ const AppointmentTypeSelector: React.FC<AppointmentTypeSelectorProps> = ({
   const [open, setOpen] = React.useState(false);
   
   // Ensure appointmentTypes is always an array
-  const safeAppointmentTypes = Array.isArray(appointmentTypes) ? appointmentTypes : [];
+  const safeAppointmentTypes = appointmentTypes ? appointmentTypes : [];
+
+  // Check if the component is properly initialized before rendering the Command component
+  const renderContent = Array.isArray(safeAppointmentTypes) && safeAppointmentTypes.length > 0;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -55,31 +58,37 @@ const AppointmentTypeSelector: React.FC<AppointmentTypeSelectorProps> = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
-        <Command>
-          <CommandInput placeholder="Search appointment types..." className="h-9" />
-          <CommandEmpty>No appointment type found.</CommandEmpty>
-          <CommandGroup>
-            {safeAppointmentTypes.map((type) => (
-              <CommandItem
-                key={type.id}
-                onSelect={() => {
-                  onSelectType(type.id);
-                  setOpen(false);
-                }}
-                className="flex flex-col items-start"
-              >
-                <div className="flex w-full items-center justify-between">
-                  <span>{type.name}</span>
-                  {selectedType === type.id && (
-                    <Check className="h-4 w-4" />
-                  )}
-                </div>
-                <span className="text-xs text-muted-foreground">{type.description}</span>
-                <span className="text-xs text-muted-foreground">Duration: {type.duration} minutes</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
+        {renderContent ? (
+          <Command>
+            <CommandInput placeholder="Search appointment types..." className="h-9" />
+            <CommandEmpty>No appointment type found.</CommandEmpty>
+            <CommandGroup>
+              {safeAppointmentTypes.map((type) => (
+                <CommandItem
+                  key={type.id}
+                  onSelect={() => {
+                    onSelectType(type.id);
+                    setOpen(false);
+                  }}
+                  className="flex flex-col items-start"
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <span>{type.name}</span>
+                    {selectedType === type.id && (
+                      <Check className="h-4 w-4" />
+                    )}
+                  </div>
+                  <span className="text-xs text-muted-foreground">{type.description}</span>
+                  <span className="text-xs text-muted-foreground">Duration: {type.duration} minutes</span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </Command>
+        ) : (
+          <div className="p-4 text-center text-sm text-muted-foreground">
+            No appointment types available
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   );
