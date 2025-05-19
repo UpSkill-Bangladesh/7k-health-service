@@ -40,7 +40,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={redirectPath} state={{ from: location }} replace />;
   }
 
-  // If specific roles are required, check if user has one of them
+  // If user is admin, allow access to all routes (unrestricted access)
+  if (user?.role === "admin") {
+    return <>{children}</>;
+  }
+
+  // For non-admin users: If specific roles are required, check if user has one of them
   if (allowedRoles && !hasRole(allowedRoles)) {
     // Simplified role-based redirection
     const redirectTo = user?.role === "patient" 

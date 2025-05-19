@@ -84,9 +84,9 @@ const App = () => {
                   </ProtectedRoute>
                 } />
 
-                {/* Patient routes */}
+                {/* Patient routes - admins should have access too */}
                 <Route path="/patient-dashboard" element={
-                  <ProtectedRoute allowedRoles={["patient"]}>
+                  <ProtectedRoute allowedRoles={["admin", "patient"]}>
                     <PatientDashboard />
                   </ProtectedRoute>
                 } />

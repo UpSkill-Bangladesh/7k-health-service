@@ -46,13 +46,34 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const navigation = [
-    { name: "Dashboard", to: "/dashboard", icon: <FileText size={20} /> },
-    { name: "Appointments", to: "/appointments", icon: <Calendar size={20} /> },
-    { name: "Patients", to: "/patients", icon: <Users size={20} /> },
-    { name: "Profile", to: "/profile", icon: <User size={20} /> },
-    { name: "Settings", to: "/settings", icon: <Settings size={20} /> },
-  ];
+  // Define navigation based on user role
+  const getNavigation = () => {
+    const baseNavigation = [
+      { name: "Dashboard", to: "/dashboard", icon: <FileText size={20} /> },
+      { name: "Appointments", to: "/appointments", icon: <Calendar size={20} /> },
+    ];
+
+    // Add patient access for admin users
+    if (user?.role === "admin") {
+      baseNavigation.push(
+        { name: "Patients", to: "/patient-dashboard", icon: <Users size={20} /> }
+      );
+    } else if (user?.role === "doctor") {
+      baseNavigation.push(
+        { name: "Patients", to: "/patients", icon: <Users size={20} /> }
+      );
+    }
+
+    // Add common items
+    baseNavigation.push(
+      { name: "Profile", to: "/profile", icon: <User size={20} /> },
+      { name: "Settings", to: "/settings", icon: <Settings size={20} /> }
+    );
+
+    return baseNavigation;
+  };
+
+  const navigation = getNavigation();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
