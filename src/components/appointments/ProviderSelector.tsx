@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Users } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -47,6 +47,22 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
     return found ? found.name : "Select provider...";
   }, [selectedProvider, safeProviders]);
 
+  // Fallback UI when no providers are available
+  if (safeProviders.length === 0) {
+    return (
+      <Button
+        variant="outline"
+        className="w-full justify-between opacity-70"
+        disabled
+      >
+        <span className="flex items-center">
+          <Users className="mr-2 h-4 w-4" />
+          No providers available
+        </span>
+      </Button>
+    );
+  }
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -62,39 +78,33 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
-        {safeProviders.length > 0 ? (
-          <Command>
-            <CommandInput placeholder="Search providers..." className="h-9" />
-            <CommandEmpty>No provider found.</CommandEmpty>
-            <CommandGroup>
-              {safeProviders.map((provider) => (
-                <CommandItem
-                  key={provider.id}
-                  onSelect={() => {
-                    onSelectProvider(provider.id);
-                    setOpen(false);
-                  }}
-                  className="flex flex-col items-start"
-                >
-                  <div className="flex w-full items-center justify-between">
-                    <span>{provider.name}</span>
-                    {selectedProvider === provider.id && (
-                      <Check className="h-4 w-4" />
-                    )}
-                  </div>
-                  <div className="flex flex-col text-xs text-muted-foreground">
-                    <span>{provider.specialty}</span>
-                    {provider.location && <span>Location: {provider.location}</span>}
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </Command>
-        ) : (
-          <div className="p-4 text-center text-sm text-muted-foreground">
-            No providers available
-          </div>
-        )}
+        <Command>
+          <CommandInput placeholder="Search providers..." className="h-9" />
+          <CommandEmpty>No provider found.</CommandEmpty>
+          <CommandGroup>
+            {safeProviders.map((provider) => (
+              <CommandItem
+                key={provider.id}
+                onSelect={() => {
+                  onSelectProvider(provider.id);
+                  setOpen(false);
+                }}
+                className="flex flex-col items-start"
+              >
+                <div className="flex w-full items-center justify-between">
+                  <span>{provider.name}</span>
+                  {selectedProvider === provider.id && (
+                    <Check className="h-4 w-4" />
+                  )}
+                </div>
+                <div className="flex flex-col text-xs text-muted-foreground">
+                  <span>{provider.specialty}</span>
+                  {provider.location && <span>Location: {provider.location}</span>}
+                </div>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
       </PopoverContent>
     </Popover>
   );

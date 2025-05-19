@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Calendar } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -46,6 +46,22 @@ const AppointmentTypeSelector: React.FC<AppointmentTypeSelectorProps> = ({
     return found ? found.name : "Select appointment type...";
   }, [selectedType, safeAppointmentTypes]);
 
+  // Fallback UI when no appointment types are available
+  if (safeAppointmentTypes.length === 0) {
+    return (
+      <Button
+        variant="outline"
+        className="w-full justify-between opacity-70"
+        disabled
+      >
+        <span className="flex items-center">
+          <Calendar className="mr-2 h-4 w-4" />
+          No appointment types available
+        </span>
+      </Button>
+    );
+  }
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -61,37 +77,31 @@ const AppointmentTypeSelector: React.FC<AppointmentTypeSelectorProps> = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
-        {safeAppointmentTypes.length > 0 ? (
-          <Command>
-            <CommandInput placeholder="Search appointment types..." className="h-9" />
-            <CommandEmpty>No appointment type found.</CommandEmpty>
-            <CommandGroup>
-              {safeAppointmentTypes.map((type) => (
-                <CommandItem
-                  key={type.id}
-                  onSelect={() => {
-                    onSelectType(type.id);
-                    setOpen(false);
-                  }}
-                  className="flex flex-col items-start"
-                >
-                  <div className="flex w-full items-center justify-between">
-                    <span>{type.name}</span>
-                    {selectedType === type.id && (
-                      <Check className="h-4 w-4" />
-                    )}
-                  </div>
-                  <span className="text-xs text-muted-foreground">{type.description}</span>
-                  <span className="text-xs text-muted-foreground">Duration: {type.duration} minutes</span>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </Command>
-        ) : (
-          <div className="p-4 text-center text-sm text-muted-foreground">
-            No appointment types available
-          </div>
-        )}
+        <Command>
+          <CommandInput placeholder="Search appointment types..." className="h-9" />
+          <CommandEmpty>No appointment type found.</CommandEmpty>
+          <CommandGroup>
+            {safeAppointmentTypes.map((type) => (
+              <CommandItem
+                key={type.id}
+                onSelect={() => {
+                  onSelectType(type.id);
+                  setOpen(false);
+                }}
+                className="flex flex-col items-start"
+              >
+                <div className="flex w-full items-center justify-between">
+                  <span>{type.name}</span>
+                  {selectedType === type.id && (
+                    <Check className="h-4 w-4" />
+                  )}
+                </div>
+                <span className="text-xs text-muted-foreground">{type.description}</span>
+                <span className="text-xs text-muted-foreground">Duration: {type.duration} minutes</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
       </PopoverContent>
     </Popover>
   );

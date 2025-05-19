@@ -48,6 +48,13 @@ const AppointmentSidebar: React.FC<AppointmentSidebarProps> = ({
   const safeLocations = Array.isArray(locations) ? locations : [];
   const safeAppointmentTypes = Array.isArray(appointmentTypes) ? appointmentTypes : [];
 
+  // Log for debugging
+  console.log('AppointmentSidebar received data:', {
+    providers: safeProviders.length,
+    locations: safeLocations.length,
+    appointmentTypes: safeAppointmentTypes.length
+  });
+
   // Get current date range description based on view
   const getDateRangeText = () => {
     if (!selectedDate) return "";
