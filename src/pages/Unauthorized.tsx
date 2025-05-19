@@ -12,10 +12,8 @@ const Unauthorized = () => {
   const handleGoBack = () => {
     if (user?.role === 'patient') {
       navigate('/patient-dashboard');
-    } else if (user?.role === 'clinicalStaff') {
+    } else if (user?.role === 'doctor') {
       navigate('/provider-dashboard');
-    } else if (user?.role === 'frontOffice' || user?.role === 'backOffice') {
-      navigate('/staff-dashboard');
     } else if (user?.role === 'admin') {
       navigate('/dashboard');
     } else {

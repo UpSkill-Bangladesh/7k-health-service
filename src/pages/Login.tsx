@@ -55,11 +55,9 @@ const Login: React.FC = () => {
     }
   };
 
-  // Sample credentials for demo
+  // Updated demo credentials to reflect new roles
   const demoCredentials = [
     { role: "Administrator", email: "admin@healthprovider.com" },
-    { role: "Front Office", email: "frontoffice@healthprovider.com" },
-    { role: "Back Office", email: "backoffice@healthprovider.com" },
     { role: "Doctor", email: "doctor@healthprovider.com" },
     { role: "Patient", email: "patient@example.com" },
   ];

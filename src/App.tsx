@@ -47,41 +47,34 @@ const App = () => (
                 <Dashboard />
               </ProtectedRoute>
             } />
-
-            {/* Staff routes */}
-            <Route path="/staff-dashboard" element={
-              <ProtectedRoute allowedRoles={["frontOffice", "backOffice"]}>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
             
-            {/* Clinical Staff routes */}
+            {/* Doctor routes */}
             <Route path="/provider-dashboard" element={
-              <ProtectedRoute allowedRoles={["clinicalStaff"]}>
+              <ProtectedRoute allowedRoles={["doctor"]}>
                 <Dashboard />
               </ProtectedRoute>
             } />
 
             <Route path="/appointments" element={
-              <ProtectedRoute allowedRoles={["admin", "frontOffice", "clinicalStaff"]}>
+              <ProtectedRoute allowedRoles={["admin", "doctor"]}>
                 <Appointments />
               </ProtectedRoute>
             } />
 
             <Route path="/appointment-scheduling" element={
-              <ProtectedRoute allowedRoles={["admin", "frontOffice", "clinicalStaff", "patient"]}>
+              <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]}>
                 <AppointmentScheduling />
               </ProtectedRoute>
             } />
 
             <Route path="/patient-registration" element={
-              <ProtectedRoute allowedRoles={["admin", "frontOffice", "patient"]}>
+              <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]}>
                 <PatientRegistration />
               </ProtectedRoute>
             } />
 
             <Route path="/patient-billing" element={
-              <ProtectedRoute allowedRoles={["admin", "frontOffice", "backOffice", "patient"]}>
+              <ProtectedRoute allowedRoles={["admin", "patient"]}>
                 <PatientBilling />
               </ProtectedRoute>
             } />

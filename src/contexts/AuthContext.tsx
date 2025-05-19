@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export type UserRole = "admin" | "frontOffice" | "backOffice" | "clinicalStaff" | "patient";
+export type UserRole = "admin" | "doctor" | "patient";
 
 interface User {
   id: string;
@@ -10,7 +10,7 @@ interface User {
   email: string;
   role: UserRole;
   facilityId?: string;
-  specialization?: string;  // For clinical staff
+  specialization?: string;  // For doctors
   lastLoginTime?: Date;     // For audit purposes
 }
 
@@ -25,7 +25,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users for demo purposes - in a real app, this would be authenticated against a backend
+// Updated mock users to reflect new role structure
 const mockUsers: User[] = [
   { 
     id: "1", 
@@ -34,24 +34,10 @@ const mockUsers: User[] = [
     role: "admin" 
   },
   { 
-    id: "2", 
-    name: "Front Office Staff", 
-    email: "frontoffice@healthprovider.com", 
-    role: "frontOffice",
-    facilityId: "facility-001"
-  },
-  { 
-    id: "3", 
-    name: "Back Office Staff", 
-    email: "backoffice@healthprovider.com", 
-    role: "backOffice",
-    facilityId: "facility-001"
-  },
-  { 
     id: "4", 
     name: "Dr. Smith", 
     email: "doctor@healthprovider.com", 
-    role: "clinicalStaff",
+    role: "doctor",
     facilityId: "facility-001",
     specialization: "Cardiology"
   },
@@ -104,13 +90,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Audit login event (in a real app, this would be sent to server)
       console.log(`[AUDIT] User ${userWithLogin.id} (${userWithLogin.role}) logged in at ${new Date().toISOString()}`);
       
-      // Redirect based on role
+      // Redirect based on simplified roles
       if (userWithLogin.role === "patient") {
         navigate("/patient-dashboard");
-      } else if (userWithLogin.role === "clinicalStaff") {
+      } else if (userWithLogin.role === "doctor") {
         navigate("/provider-dashboard");
-      } else if (userWithLogin.role === "frontOffice" || userWithLogin.role === "backOffice") {
-        navigate("/staff-dashboard");
       } else {
         navigate("/dashboard");
       }

@@ -42,13 +42,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // If specific roles are required, check if user has one of them
   if (allowedRoles && !hasRole(allowedRoles)) {
+    // Simplified role-based redirection
     const redirectTo = user?.role === "patient" 
       ? "/patient-dashboard" 
-      : user?.role === "clinicalStaff"
+      : user?.role === "doctor"
         ? "/provider-dashboard"
-        : user?.role === "frontOffice" || user?.role === "backOffice"
-          ? "/staff-dashboard"
-          : "/unauthorized";
+        : "/unauthorized";
     
     if (showToastOnRedirect) {
       toast({
