@@ -21,17 +21,20 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
   selectedLocation,
   onSelectLocation,
 }) => {
+  // Ensure locations is always an array
+  const safeLocations = Array.isArray(locations) ? locations : [];
+
   // Get the currently selected location (if any)
   const currentLocation = React.useMemo(() => {
-    return locations.find(location => location.id === selectedLocation);
-  }, [locations, selectedLocation]);
+    return safeLocations.find(location => location.id === selectedLocation);
+  }, [safeLocations, selectedLocation]);
 
   // Handle text input change
   const handleLocationInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     
     // If the input matches a location name, select it
-    const matchedLocation = locations.find(loc => 
+    const matchedLocation = safeLocations.find(loc => 
       loc.name.toLowerCase() === inputValue.toLowerCase()
     );
     
