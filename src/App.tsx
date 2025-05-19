@@ -8,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages
+import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import PatientDashboard from "./pages/PatientDashboard";
@@ -38,6 +39,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             {/* Public routes */}
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -88,9 +90,6 @@ const App = () => (
             
             {/* Redirect /patients to the appropriate page based on user role */}
             <Route path="/patients" element={<Navigate to="/patient-dashboard" replace />} />
-
-            {/* Home route redirects based on role */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
             
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
