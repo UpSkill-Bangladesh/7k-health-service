@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -30,74 +31,78 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/unauthorized" element={<Unauthorized />} />
+const App = () => {
+  return (
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/unauthorized" element={<Unauthorized />} />
 
-            {/* Admin routes */}
-            <Route path="/dashboard" element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            
-            {/* Doctor routes */}
-            <Route path="/provider-dashboard" element={
-              <ProtectedRoute allowedRoles={["doctor"]}>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
+                {/* Admin routes */}
+                <Route path="/dashboard" element={
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
+                
+                {/* Doctor routes */}
+                <Route path="/provider-dashboard" element={
+                  <ProtectedRoute allowedRoles={["doctor"]}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
 
-            <Route path="/appointments" element={
-              <ProtectedRoute allowedRoles={["admin", "doctor"]}>
-                <Appointments />
-              </ProtectedRoute>
-            } />
+                <Route path="/appointments" element={
+                  <ProtectedRoute allowedRoles={["admin", "doctor"]}>
+                    <Appointments />
+                  </ProtectedRoute>
+                } />
 
-            <Route path="/appointment-scheduling" element={
-              <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]}>
-                <AppointmentScheduling />
-              </ProtectedRoute>
-            } />
+                <Route path="/appointment-scheduling" element={
+                  <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]}>
+                    <AppointmentScheduling />
+                  </ProtectedRoute>
+                } />
 
-            <Route path="/patient-registration" element={
-              <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]}>
-                <PatientRegistration />
-              </ProtectedRoute>
-            } />
+                <Route path="/patient-registration" element={
+                  <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]}>
+                    <PatientRegistration />
+                  </ProtectedRoute>
+                } />
 
-            <Route path="/patient-billing" element={
-              <ProtectedRoute allowedRoles={["admin", "patient"]}>
-                <PatientBilling />
-              </ProtectedRoute>
-            } />
+                <Route path="/patient-billing" element={
+                  <ProtectedRoute allowedRoles={["admin", "patient"]}>
+                    <PatientBilling />
+                  </ProtectedRoute>
+                } />
 
-            {/* Patient routes */}
-            <Route path="/patient-dashboard" element={
-              <ProtectedRoute allowedRoles={["patient"]}>
-                <PatientDashboard />
-              </ProtectedRoute>
-            } />
-            
-            {/* Redirect /patients to the appropriate page based on user role */}
-            <Route path="/patients" element={<Navigate to="/patient-dashboard" replace />} />
-            
-            {/* Catch-all route */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+                {/* Patient routes */}
+                <Route path="/patient-dashboard" element={
+                  <ProtectedRoute allowedRoles={["patient"]}>
+                    <PatientDashboard />
+                  </ProtectedRoute>
+                } />
+                
+                {/* Redirect /patients to the appropriate page based on user role */}
+                <Route path="/patients" element={<Navigate to="/patient-dashboard" replace />} />
+                
+                {/* Catch-all route */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </React.StrictMode>
+  );
+};
 
 export default App;
