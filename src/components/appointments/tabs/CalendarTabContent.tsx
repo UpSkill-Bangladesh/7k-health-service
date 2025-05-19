@@ -34,13 +34,30 @@ interface CalendarTabContentProps {
 }
 
 const CalendarTabContent: React.FC<CalendarTabContentProps> = (props) => {
-  const { user } = props;
+  const { user, mockProviders, mockLocations, mockAppointmentTypes } = props;
   const isAdminOrDoctor = user?.role === "admin" || user?.role === "doctor";
+  
+  // Ensure data arrays are defined
+  const safeProviders = Array.isArray(mockProviders) ? mockProviders : [];
+  const safeLocations = Array.isArray(mockLocations) ? mockLocations : [];
+  const safeAppointmentTypes = Array.isArray(mockAppointmentTypes) ? mockAppointmentTypes : [];
+
+  // Log for debugging
+  console.log('CalendarTabContent props:', {
+    providers: safeProviders,
+    locations: safeLocations,
+    appointmentTypes: safeAppointmentTypes
+  });
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <div className="lg:col-span-3">
-        <AppointmentCalendarView {...props} />
+        <AppointmentCalendarView 
+          {...props}
+          mockProviders={safeProviders}
+          mockLocations={safeLocations}
+          mockAppointmentTypes={safeAppointmentTypes}
+        />
       </div>
       {isAdminOrDoctor && (
         <div className="lg:col-span-1">

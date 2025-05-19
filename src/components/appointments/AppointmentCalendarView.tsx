@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CalendarViewHeader from "./views/CalendarViewHeader";
 import AppointmentSidebar from "./views/AppointmentSidebar";
 import CalendarViewMain from "./views/CalendarViewMain";
@@ -65,6 +65,27 @@ const AppointmentCalendarView: React.FC<AppointmentCalendarViewProps> = ({
   
   // Get user role
   const userRole = user?.role as UserRole;
+  
+  // Ensure data arrays are defined
+  const safeProviders = Array.isArray(mockProviders) ? mockProviders : [];
+  const safeLocations = Array.isArray(mockLocations) ? mockLocations : [];
+  const safeAppointmentTypes = Array.isArray(mockAppointmentTypes) ? mockAppointmentTypes : [];
+  
+  // Log for debugging
+  console.log('AppointmentCalendarView props:', {
+    providers: safeProviders,
+    locations: safeLocations,
+    appointmentTypes: safeAppointmentTypes
+  });
+
+  // Ensure mock data is loaded
+  useEffect(() => {
+    console.log("Calendar view initialized with data:", {
+      providers: safeProviders.length,
+      locations: safeLocations.length,
+      appointmentTypes: safeAppointmentTypes.length
+    });
+  }, [safeProviders, safeLocations, safeAppointmentTypes]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -81,9 +102,9 @@ const AppointmentCalendarView: React.FC<AppointmentCalendarViewProps> = ({
         {/* Sidebar: Filters & Selection */}
         <div className="md:col-span-1 space-y-4">
           <AppointmentSidebar
-            providers={mockProviders}
-            locations={mockLocations}
-            appointmentTypes={mockAppointmentTypes}
+            providers={safeProviders}
+            locations={safeLocations}
+            appointmentTypes={safeAppointmentTypes}
             selectedProvider={selectedProvider}
             setSelectedProvider={setSelectedProvider}
             selectedLocation={selectedLocation}
@@ -116,9 +137,9 @@ const AppointmentCalendarView: React.FC<AppointmentCalendarViewProps> = ({
             getDisabledDays={getDisabledDays}
             getAvailableTimeSlots={getAvailableTimeSlots}
             calendarView={calendarView}
-            providers={mockProviders}
-            locations={mockLocations}
-            appointmentTypes={mockAppointmentTypes}
+            providers={safeProviders}
+            locations={safeLocations}
+            appointmentTypes={safeAppointmentTypes}
             userRole={userRole}
           />
         </div>

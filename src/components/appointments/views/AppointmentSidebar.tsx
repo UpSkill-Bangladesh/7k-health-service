@@ -43,6 +43,11 @@ const AppointmentSidebar: React.FC<AppointmentSidebarProps> = ({
   const isDoctor = userRole === "doctor";
   const isPatient = userRole === "patient";
 
+  // Ensure all arrays are properly initialized
+  const safeProviders = Array.isArray(providers) ? providers : [];
+  const safeLocations = Array.isArray(locations) ? locations : [];
+  const safeAppointmentTypes = Array.isArray(appointmentTypes) ? appointmentTypes : [];
+
   // Get current date range description based on view
   const getDateRangeText = () => {
     if (!selectedDate) return "";
@@ -85,7 +90,7 @@ const AppointmentSidebar: React.FC<AppointmentSidebarProps> = ({
               Healthcare Provider
             </Label>
             <ProviderSelector 
-              providers={providers} 
+              providers={safeProviders} 
               selectedProvider={selectedProvider}
               onSelectProvider={setSelectedProvider}
             />
@@ -98,7 +103,7 @@ const AppointmentSidebar: React.FC<AppointmentSidebarProps> = ({
                 Location
               </Label>
               <LocationSelector 
-                locations={locations}
+                locations={safeLocations}
                 selectedLocation={selectedLocation}
                 onSelectLocation={setSelectedLocation}
               />
@@ -111,7 +116,7 @@ const AppointmentSidebar: React.FC<AppointmentSidebarProps> = ({
               Appointment Type
             </Label>
             <AppointmentTypeSelector 
-              appointmentTypes={appointmentTypes}
+              appointmentTypes={safeAppointmentTypes}
               selectedType={selectedAppointmentType}
               onSelectType={setSelectedAppointmentType}
             />

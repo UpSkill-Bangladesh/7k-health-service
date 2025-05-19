@@ -37,10 +37,14 @@ const AppointmentTypeSelector: React.FC<AppointmentTypeSelectorProps> = ({
   const [open, setOpen] = React.useState(false);
   
   // Ensure appointmentTypes is always an array
-  const safeAppointmentTypes = appointmentTypes ? appointmentTypes : [];
+  const safeAppointmentTypes = Array.isArray(appointmentTypes) ? appointmentTypes : [];
 
-  // Check if the component is properly initialized before rendering the Command component
-  const renderContent = Array.isArray(safeAppointmentTypes) && safeAppointmentTypes.length > 0;
+  // Find the currently selected type
+  const selectedTypeName = React.useMemo(() => {
+    if (!selectedType) return "";
+    const found = safeAppointmentTypes.find((type) => type.id === selectedType);
+    return found ? found.name : "Select appointment type...";
+  }, [selectedType, safeAppointmentTypes]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -50,15 +54,14 @@ const AppointmentTypeSelector: React.FC<AppointmentTypeSelectorProps> = ({
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between"
+          data-testid="appointment-type-selector-button"
         >
-          {selectedType
-            ? safeAppointmentTypes.find((type) => type.id === selectedType)?.name || "Unknown type"
-            : "Select appointment type..."}
+          {selectedTypeName || "Select appointment type..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
-        {renderContent ? (
+        {safeAppointmentTypes.length > 0 ? (
           <Command>
             <CommandInput placeholder="Search appointment types..." className="h-9" />
             <CommandEmpty>No appointment type found.</CommandEmpty>

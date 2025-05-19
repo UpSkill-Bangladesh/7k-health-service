@@ -38,10 +38,14 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
   const [open, setOpen] = React.useState(false);
   
   // Ensure providers is always an array
-  const safeProviders = providers ? providers : [];
+  const safeProviders = Array.isArray(providers) ? providers : [];
 
-  // Check if the component is properly initialized before rendering the Command component
-  const renderContent = Array.isArray(safeProviders) && safeProviders.length > 0;
+  // Find the currently selected provider
+  const selectedProviderName = React.useMemo(() => {
+    if (!selectedProvider) return "";
+    const found = safeProviders.find((provider) => provider.id === selectedProvider);
+    return found ? found.name : "Select provider...";
+  }, [selectedProvider, safeProviders]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -51,15 +55,14 @@ const ProviderSelector: React.FC<ProviderSelectorProps> = ({
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between"
+          data-testid="provider-selector-button"
         >
-          {selectedProvider
-            ? safeProviders.find((provider) => provider.id === selectedProvider)?.name || "Unknown provider"
-            : "Select provider..."}
+          {selectedProviderName || "Select provider..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
-        {renderContent ? (
+        {safeProviders.length > 0 ? (
           <Command>
             <CommandInput placeholder="Search providers..." className="h-9" />
             <CommandEmpty>No provider found.</CommandEmpty>
