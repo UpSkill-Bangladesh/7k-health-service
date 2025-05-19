@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
@@ -53,14 +52,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       { name: "Appointments", to: "/appointments", icon: <Calendar size={20} /> },
     ];
 
-    // Add patient access for admin users
+    // Add patient management link for admin users
     if (user?.role === "admin") {
       baseNavigation.push(
-        { name: "Patients", to: "/patient-dashboard", icon: <Users size={20} /> }
+        { name: "Patient Management", to: "/admin/patients", icon: <Users size={20} /> }
       );
     } else if (user?.role === "doctor") {
       baseNavigation.push(
         { name: "Patients", to: "/patients", icon: <Users size={20} /> }
+      );
+    } else if (user?.role === "patient") {
+      // For patient role, keep access to their dashboard
+      baseNavigation.push(
+        { name: "My Dashboard", to: "/patient-dashboard", icon: <User size={20} /> }
       );
     }
 

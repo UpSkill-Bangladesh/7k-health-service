@@ -9,13 +9,15 @@ interface ProtectedRouteProps {
   allowedRoles?: UserRole[];
   redirectPath?: string;
   showToastOnRedirect?: boolean;
+  adminRedirectOverride?: string;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
   allowedRoles, 
   redirectPath = "/login", 
-  showToastOnRedirect = true 
+  showToastOnRedirect = true,
+  adminRedirectOverride
 }) => {
   const { isAuthenticated, user, loading, hasRole } = useAuth();
   const location = useLocation();
@@ -41,7 +43,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // If user is admin, allow access to all routes (unrestricted access)
+  // But prevent access to patient-specific routes by redirecting to admin dashboard
   if (user?.role === "admin") {
+    // If this is a patient-specific route and we have an override, redirect admin to their dashboard
+    if (adminRedirectOverride && location.pathname.includes('/patient-')) {
+      return <Navigate to={adminRedirectOverride} replace />;
+    }
     return <>{children}</>;
   }
 

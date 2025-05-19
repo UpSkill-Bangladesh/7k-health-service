@@ -19,6 +19,7 @@ import PatientRegistration from "./pages/PatientRegistration";
 import PatientBilling from "./pages/PatientBilling";
 import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
+import AdminPatientManagement from "./pages/admin/AdminPatientManagement";
 
 // Create the query client
 const queryClient = new QueryClient({
@@ -53,6 +54,12 @@ const App = () => {
                   </ProtectedRoute>
                 } />
                 
+                <Route path="/admin/patients" element={
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <AdminPatientManagement />
+                  </ProtectedRoute>
+                } />
+                
                 {/* Doctor routes */}
                 <Route path="/provider-dashboard" element={
                   <ProtectedRoute allowedRoles={["doctor"]}>
@@ -73,26 +80,34 @@ const App = () => {
                 } />
 
                 <Route path="/patient-registration" element={
-                  <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]}>
+                  <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]} adminRedirectOverride="/admin/patients">
                     <PatientRegistration />
                   </ProtectedRoute>
                 } />
 
                 <Route path="/patient-billing" element={
-                  <ProtectedRoute allowedRoles={["admin", "patient"]}>
+                  <ProtectedRoute allowedRoles={["admin", "patient"]} adminRedirectOverride="/dashboard">
                     <PatientBilling />
                   </ProtectedRoute>
                 } />
 
-                {/* Patient routes - admins should have access too */}
+                {/* Patient routes - admins should NOT be directed here */}
                 <Route path="/patient-dashboard" element={
-                  <ProtectedRoute allowedRoles={["admin", "patient"]}>
+                  <ProtectedRoute allowedRoles={["patient"]} adminRedirectOverride="/admin/patients">
                     <PatientDashboard />
                   </ProtectedRoute>
                 } />
                 
                 {/* Redirect /patients to the appropriate page based on user role */}
-                <Route path="/patients" element={<Navigate to="/patient-dashboard" replace />} />
+                <Route path="/patients" element={
+                  <ProtectedRoute>
+                    {({ user }) => (
+                      user?.role === "admin" ? 
+                        <Navigate to="/admin/patients" replace /> : 
+                        <Navigate to="/patient-dashboard" replace />
+                    )}
+                  </ProtectedRoute>
+                } />
                 
                 {/* Catch-all route */}
                 <Route path="*" element={<NotFound />} />
