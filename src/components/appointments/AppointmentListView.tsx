@@ -1,9 +1,8 @@
 
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import AppointmentListHeader from "./AppointmentListHeader";
+import AppointmentListItem from "./AppointmentListItem";
 import { Provider } from "./ProviderSelector";
 import { Location } from "./LocationSelector";
 import { AppointmentType } from "./AppointmentTypeSelector";
@@ -40,19 +39,12 @@ const AppointmentListView: React.FC<AppointmentListViewProps> = ({
   handleCancelAppointment,
   user
 }) => {
+  const isAdmin = user?.role !== "patient";
+  
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle>Upcoming Appointments</CardTitle>
-          <CardDescription>View and manage your scheduled appointments</CardDescription>
-        </div>
-        
-        {user?.role !== "patient" && (
-          <Button className="bg-healthcare-primary hover:bg-healthcare-accent">
-            Export Schedule
-          </Button>
-        )}
+      <CardHeader>
+        <AppointmentListHeader showExportButton={isAdmin} />
       </CardHeader>
       <CardContent>
         {myAppointments.length > 0 ? (
@@ -63,60 +55,15 @@ const AppointmentListView: React.FC<AppointmentListViewProps> = ({
               const appointmentType = mockAppointmentTypes.find(t => t.id === appointment.typeId);
               
               return (
-                <Collapsible key={appointment.id} className="border rounded-lg p-4">
-                  <div className="flex justify-between items-center">
-                    <div className="space-y-1">
-                      <div className="font-medium flex items-center">
-                        <CalendarIcon className="h-4 w-4 mr-2 text-healthcare-primary" />
-                        {appointment.date} at {appointment.time}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {provider?.name} - {appointmentType?.name}
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => handleRescheduleAppointment(appointment.id)}
-                      >
-                        Reschedule
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50" 
-                        onClick={() => handleCancelAppointment(appointment.id)}
-                      >
-                        Cancel
-                      </Button>
-                      <CollapsibleTrigger className="p-2">
-                        <ChevronDown className="h-4 w-4" />
-                      </CollapsibleTrigger>
-                    </div>
-                  </div>
-                  
-                  <CollapsibleContent className="pt-4 space-y-2">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <h4 className="text-sm font-medium">Location</h4>
-                        <p className="text-sm text-muted-foreground">{location?.name}</p>
-                        <p className="text-xs text-muted-foreground">{location?.address}</p>
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-medium">Appointment Type</h4>
-                        <p className="text-sm text-muted-foreground">{appointmentType?.name}</p>
-                        <p className="text-xs text-muted-foreground">{appointmentType?.description}</p>
-                      </div>
-                      {appointment.notes && (
-                        <div className="col-span-2">
-                          <h4 className="text-sm font-medium">Notes</h4>
-                          <p className="text-sm text-muted-foreground">{appointment.notes}</p>
-                        </div>
-                      )}
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
+                <AppointmentListItem
+                  key={appointment.id}
+                  appointment={appointment}
+                  provider={provider}
+                  location={location}
+                  appointmentType={appointmentType}
+                  onReschedule={handleRescheduleAppointment}
+                  onCancel={handleCancelAppointment}
+                />
               );
             })}
           </div>
