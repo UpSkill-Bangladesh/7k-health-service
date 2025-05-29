@@ -21,6 +21,11 @@ import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
 import AdminPatientManagement from "./pages/admin/AdminPatientManagement";
 
+// Create a simple redirect component for the /patients route
+const PatientsRedirect = () => {
+  return <Navigate to="/admin/patients" replace />;
+};
+
 // Create the query client
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -98,14 +103,10 @@ const App = () => {
                   </ProtectedRoute>
                 } />
                 
-                {/* Redirect /patients to the appropriate page based on user role */}
+                {/* Redirect /patients to admin patients page for admins, patient dashboard for patients */}
                 <Route path="/patients" element={
-                  <ProtectedRoute>
-                    {({ user }) => {
-                      return user?.role === "admin" ? 
-                        <Navigate to="/admin/patients" replace /> : 
-                        <Navigate to="/patient-dashboard" replace />;
-                    }}
+                  <ProtectedRoute allowedRoles={["admin", "patient"]}>
+                    <PatientsRedirect />
                   </ProtectedRoute>
                 } />
                 
