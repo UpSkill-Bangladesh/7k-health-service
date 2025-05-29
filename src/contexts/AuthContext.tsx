@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export type UserRole = "admin" | "doctor" | "patient";
+export type UserRole = "admin" | "doctor";
 
 interface User {
   id: string;
@@ -25,7 +25,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Updated mock users to reflect new role structure
+// Updated mock users to exclude patients
 const mockUsers: User[] = [
   { 
     id: "1", 
@@ -40,12 +40,6 @@ const mockUsers: User[] = [
     role: "doctor",
     facilityId: "facility-001",
     specialization: "Cardiology"
-  },
-  { 
-    id: "5", 
-    name: "John Patient", 
-    email: "patient@example.com", 
-    role: "patient" 
   },
 ];
 
@@ -90,10 +84,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Audit login event (in a real app, this would be sent to server)
       console.log(`[AUDIT] User ${userWithLogin.id} (${userWithLogin.role}) logged in at ${new Date().toISOString()}`);
       
-      // Redirect based on simplified roles
-      if (userWithLogin.role === "patient") {
-        navigate("/patient-dashboard");
-      } else if (userWithLogin.role === "doctor") {
+      // Redirect based on roles
+      if (userWithLogin.role === "doctor") {
         navigate("/provider-dashboard");
       } else {
         navigate("/dashboard");

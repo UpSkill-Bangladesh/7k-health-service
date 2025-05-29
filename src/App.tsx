@@ -12,7 +12,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import PatientDashboard from "./pages/PatientDashboard";
 import Appointments from "./pages/Appointments";
 import AppointmentScheduling from "./pages/AppointmentScheduling";
 import PatientRegistration from "./pages/PatientRegistration";
@@ -20,11 +19,6 @@ import PatientBilling from "./pages/PatientBilling";
 import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
 import AdminPatientManagement from "./pages/admin/AdminPatientManagement";
-
-// Create a simple redirect component for the /patients route
-const PatientsRedirect = () => {
-  return <Navigate to="/admin/patients" replace />;
-};
 
 // Create the query client
 const queryClient = new QueryClient({
@@ -79,34 +73,20 @@ const App = () => {
                 } />
 
                 <Route path="/appointment-scheduling" element={
-                  <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]}>
+                  <ProtectedRoute allowedRoles={["admin", "doctor"]}>
                     <AppointmentScheduling />
                   </ProtectedRoute>
                 } />
 
                 <Route path="/patient-registration" element={
-                  <ProtectedRoute allowedRoles={["admin", "doctor", "patient"]} adminRedirectOverride="/admin/patients">
+                  <ProtectedRoute allowedRoles={["admin", "doctor"]}>
                     <PatientRegistration />
                   </ProtectedRoute>
                 } />
 
                 <Route path="/patient-billing" element={
-                  <ProtectedRoute allowedRoles={["admin", "patient"]} adminRedirectOverride="/dashboard">
+                  <ProtectedRoute allowedRoles={["admin"]}>
                     <PatientBilling />
-                  </ProtectedRoute>
-                } />
-
-                {/* Patient routes - admins should NOT be directed here */}
-                <Route path="/patient-dashboard" element={
-                  <ProtectedRoute allowedRoles={["patient"]} adminRedirectOverride="/admin/patients">
-                    <PatientDashboard />
-                  </ProtectedRoute>
-                } />
-                
-                {/* Redirect /patients to admin patients page for admins, patient dashboard for patients */}
-                <Route path="/patients" element={
-                  <ProtectedRoute allowedRoles={["admin", "patient"]}>
-                    <PatientsRedirect />
                   </ProtectedRoute>
                 } />
                 

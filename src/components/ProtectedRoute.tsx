@@ -9,15 +9,13 @@ interface ProtectedRouteProps {
   allowedRoles?: UserRole[];
   redirectPath?: string;
   showToastOnRedirect?: boolean;
-  adminRedirectOverride?: string;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
   allowedRoles, 
   redirectPath = "/login", 
-  showToastOnRedirect = true,
-  adminRedirectOverride
+  showToastOnRedirect = true
 }) => {
   const { isAuthenticated, user, loading, hasRole } = useAuth();
   const location = useLocation();
@@ -42,24 +40,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={redirectPath} state={{ from: location }} replace />;
   }
 
-  // If user is admin, allow access to all routes (unrestricted access)
-  // But prevent access to patient-specific routes by redirecting to admin dashboard
+  // If user is admin, allow access to all routes
   if (user?.role === "admin") {
-    // If this is a patient-specific route and we have an override, redirect admin to their dashboard
-    if (adminRedirectOverride && location.pathname.includes('/patient-')) {
-      return <Navigate to={adminRedirectOverride} replace />;
-    }
     return <>{children}</>;
   }
 
   // For non-admin users: If specific roles are required, check if user has one of them
   if (allowedRoles && !hasRole(allowedRoles)) {
-    // Simplified role-based redirection
-    const redirectTo = user?.role === "patient" 
-      ? "/patient-dashboard" 
-      : user?.role === "doctor"
-        ? "/provider-dashboard"
-        : "/unauthorized";
+    // Redirect to appropriate dashboard or unauthorized
+    const redirectTo = user?.role === "doctor" 
+      ? "/provider-dashboard"
+      : "/unauthorized";
     
     if (showToastOnRedirect) {
       toast({
