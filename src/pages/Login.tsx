@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -8,17 +9,15 @@ import { useNavigate } from "react-router-dom";
 import { Shield, Info, Lock } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    login
-  } = useAuth();
-  const {
-    toast
-  } = useToast();
+  const { login } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
@@ -47,28 +46,30 @@ const Login: React.FC = () => {
   };
 
   // Updated demo credentials to reflect new roles
-  const demoCredentials = [{
-    role: "Administrator",
-    email: "admin@healthprovider.com"
-  }, {
-    role: "Doctor",
-    email: "doctor@healthprovider.com"
-  }, {
-    role: "Patient",
-    email: "patient@example.com"
-  }];
+  const demoCredentials = [
+    {
+      role: "Administrator",
+      email: "admin@healthprovider.com"
+    },
+    {
+      role: "Doctor",
+      email: "doctor@healthprovider.com"
+    }
+  ];
+
   const handleDemoLogin = (demoEmail: string) => {
     setEmail(demoEmail);
     setPassword("password"); // In a real app, you wouldn't do this
   };
-  return <div className="min-h-screen bg-healthcare-light flex flex-col justify-center px-4">
+
+  return (
+    <div className="min-h-screen bg-healthcare-light flex flex-col justify-center px-4">
       <div className="max-w-md mx-auto w-full">
         <div className="text-center mb-8">
           <div className="h-16 w-16 bg-healthcare-primary rounded-full mx-auto flex items-center justify-center">
             <Shield className="h-10 w-10 text-white" />
           </div>
-          <h1 className="text-3xl font-bold mt-4 text-healthcare-dark">HealthCare360
-        </h1>
+          <h1 className="text-3xl font-bold mt-4 text-healthcare-dark">UpCare MediConnect</h1>
           <p className="text-gray-600 mt-2">Healthcare Service Provider Platform</p>
           <div className="flex justify-center gap-2 mt-2">
             <Badge variant="outline" className="bg-green-50 text-green-800 border-green-200">
@@ -94,7 +95,16 @@ const Login: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
-                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} className="healthcare-input" required autoComplete="username" />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="you@example.com" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  className="healthcare-input" 
+                  required 
+                  autoComplete="username" 
+                />
               </div>
               
               <div className="space-y-2">
@@ -104,10 +114,23 @@ const Login: React.FC = () => {
                     Forgot password?
                   </a>
                 </div>
-                <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} className="healthcare-input" required autoComplete="current-password" />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  className="healthcare-input" 
+                  required 
+                  autoComplete="current-password" 
+                />
               </div>
               
-              <Button type="submit" className="w-full bg-healthcare-primary hover:bg-healthcare-accent text-white" disabled={isLoading}>
+              <Button 
+                type="submit" 
+                className="w-full bg-healthcare-primary hover:bg-healthcare-accent text-white" 
+                disabled={isLoading}
+              >
                 {isLoading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
@@ -119,9 +142,17 @@ const Login: React.FC = () => {
               </div>
               
               <div className="grid grid-cols-1 gap-2">
-                {demoCredentials.map(cred => <Button key={cred.email} variant="outline" size="sm" className="text-xs justify-start" onClick={() => handleDemoLogin(cred.email)}>
+                {demoCredentials.map((cred) => (
+                  <Button 
+                    key={cred.email} 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-xs justify-start" 
+                    onClick={() => handleDemoLogin(cred.email)}
+                  >
                     <span className="truncate">{cred.role}: {cred.email}</span>
-                  </Button>)}
+                  </Button>
+                ))}
               </div>
               <div className="text-center mt-4">
                 <p className="text-xs text-gray-500">Any password will work for demo purposes</p>
@@ -135,10 +166,12 @@ const Login: React.FC = () => {
               <p>This system is for authorized personnel only</p>
             </div>
             <p>All activity is monitored and recorded for compliance purposes</p>
-            <p className="text-xs">HIPAA Compliant • Secure • {new Date().getFullYear()} © HealthProvide</p>
+            <p className="text-xs">HIPAA Compliant • Secure • {new Date().getFullYear()} © UpCare MediConnect</p>
           </CardFooter>
         </Card>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Login;
