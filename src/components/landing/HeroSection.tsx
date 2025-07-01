@@ -55,7 +55,7 @@ const HeroSection: React.FC = () => {
               <div className="absolute top-1/2 right-0 transform translate-x-1/4 -translate-y-1/2 w-20 h-20 bg-indigo-100 rounded-full opacity-30"></div>
               <img 
                 src="/hero-dashboard.svg" 
-                alt="HealthProvide Dashboard" 
+                alt="UpCare MediConnect Dashboard" 
                 className="relative z-10 rounded-xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.3)] border border-white bg-white transform hover:scale-[1.02] transition-all duration-300"
               />
             </div>

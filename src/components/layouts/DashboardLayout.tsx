@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
@@ -61,11 +62,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       baseNavigation.push(
         { name: "Patients", to: "/patients", icon: <Users size={20} /> }
       );
-    } else if (user?.role === "patient") {
-      // For patient role, keep access to their dashboard
-      baseNavigation.push(
-        { name: "My Dashboard", to: "/patient-dashboard", icon: <User size={20} /> }
-      );
     }
 
     // Add common items
@@ -98,7 +94,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               <div className="flex items-center">
                 <div className="h-8 w-8 rounded-full bg-healthcare-primary"></div>
                 <span className="ml-3 text-lg font-bold text-healthcare-dark">
-                  HealthProvide
+                  UpCare MediConnect
                 </span>
               </div>
               <button
@@ -179,7 +175,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         
         {/* HIPAA compliance footer */}
         <footer className="healthcare-hipaa-footer">
-          <p>Protected by HIPAA Compliance Standards • {new Date().getFullYear()} © HealthProvide</p>
+          <p>Protected by HIPAA Compliance Standards • {new Date().getFullYear()} © UpCare MediConnect</p>
         </footer>
       </div>
 

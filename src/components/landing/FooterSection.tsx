@@ -11,7 +11,7 @@ const FooterSection: React.FC = () => {
           <div className="mb-8 md:mb-0">
             <div className="flex items-center gap-2 mb-4">
               <Shield className="h-6 w-6" />
-              <span className="text-xl font-bold">HealthProvide</span>
+              <span className="text-xl font-bold">UpCare MediConnect</span>
             </div>
             <p className="text-gray-400 max-w-xs">
               AI-powered practice management for modern healthcare providers in NY, NJ, and PA.
@@ -74,7 +74,7 @@ const FooterSection: React.FC = () => {
         
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">
-            &copy; {new Date().getFullYear()} HealthProvide. All rights reserved.
+            &copy; {new Date().getFullYear()} UpCare MediConnect. All rights reserved.
           </p>
           <div className="mt-4 md:mt-0">
             <div className="flex items-center gap-2">
