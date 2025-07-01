@@ -11,11 +11,9 @@ const AppointmentHistoryView: React.FC = () => {
       <CardHeader>
         <CardTitle>Appointment History</CardTitle>
         <CardDescription>
-          {user?.role === "patient" 
-            ? "View your past appointments" 
-            : user?.role === "doctor"
-              ? "View your patients' past appointments"
-              : "View all past appointments"}
+          {user?.role === "doctor"
+            ? "View your patients' past appointments"
+            : "View all past appointments"}
         </CardDescription>
       </CardHeader>
       <CardContent>

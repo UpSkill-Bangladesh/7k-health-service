@@ -59,14 +59,6 @@ const AppointmentScheduling: React.FC = () => {
   const appointmentManager = useAppointmentManagement(user);
   const availableTabs = appointmentManager.getAvailableTabs();
 
-  // Set default tab based on user role
-  React.useEffect(() => {
-    if (user?.role === "patient") {
-      // For patients, we default to calendar view to let them book
-      setActiveTab("calendar");
-    }
-  }, [user]);
-
   // Function to handle adding a new patient directly from the appointment form
   const handleAddPatientClick = () => {
     setIsAddPatientDialogOpen(true);

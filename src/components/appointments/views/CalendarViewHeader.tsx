@@ -20,7 +20,6 @@ const CalendarViewHeader: React.FC<CalendarViewHeaderProps> = ({
 }) => {
   const isAdmin = userRole === "admin";
   const isDoctor = userRole === "doctor";
-  const isPatient = userRole === "patient";
 
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -28,12 +27,12 @@ const CalendarViewHeader: React.FC<CalendarViewHeaderProps> = ({
         <h2 className="text-2xl font-bold text-healthcare-accent mb-1">
           {isAdmin ? "Appointment Management" : 
            isDoctor ? "My Appointments" : 
-           "Book an Appointment"}
+           "Appointment Scheduling"}
         </h2>
         <p className="text-muted-foreground">
           {isAdmin ? "Manage schedules across all providers" :
            isDoctor ? "View your upcoming appointments" :
-           "Find available appointment slots"}
+           "Schedule appointments for patients"}
         </p>
       </div>
       

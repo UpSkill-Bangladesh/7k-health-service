@@ -50,8 +50,6 @@ const AppointmentBookingDialog: React.FC<AppointmentBookingDialogProps> = ({
   locations,
   userRole
 }) => {
-  const isPatient = userRole === "patient";
-
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
@@ -59,17 +57,15 @@ const AppointmentBookingDialog: React.FC<AppointmentBookingDialogProps> = ({
           disabled={!selectedProvider || !selectedLocation || !selectedAppointmentType || !selectedDate} 
           className="w-full bg-healthcare-primary hover:bg-healthcare-accent transition-colors"
         >
-          {isPatient ? "Book Appointment" : "Schedule Appointment"}
+          Schedule Appointment
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>
-            {isPatient ? "Book Your Appointment" : "Schedule Appointment"}
-          </DialogTitle>
+          <DialogTitle>Schedule Appointment</DialogTitle>
           <DialogDescription>
             {selectedProvider && selectedLocation && selectedDate ? 
-              `Schedule ${isPatient ? "your" : "an"} appointment with ${providers.find(p => p.id === selectedProvider)?.name} at ${locations.find(l => l.id === selectedLocation)?.name} on ${format(selectedDate, "PPPP")}` :
+              `Schedule an appointment with ${providers.find(p => p.id === selectedProvider)?.name} at ${locations.find(l => l.id === selectedLocation)?.name} on ${format(selectedDate, "PPPP")}` :
               "Select a provider, location, and date to book an appointment"}
           </DialogDescription>
         </DialogHeader>
@@ -125,7 +121,7 @@ const AppointmentBookingDialog: React.FC<AppointmentBookingDialogProps> = ({
             <Label htmlFor="notes" className="font-medium">Notes</Label>
             <Textarea 
               id="notes" 
-              placeholder={isPatient ? "Reason for visit or special requests" : "Additional appointment details"}
+              placeholder="Additional appointment details"
               value={appointmentNotes}
               onChange={(e) => setAppointmentNotes(e.target.value)}
               className="resize-none"
@@ -138,7 +134,7 @@ const AppointmentBookingDialog: React.FC<AppointmentBookingDialogProps> = ({
             onClick={handleBookAppointment}
             className="bg-healthcare-primary hover:bg-healthcare-accent transition-colors"
           >
-            {isPatient ? "Confirm Booking" : "Schedule Appointment"}
+            Schedule Appointment
           </Button>
         </DialogFooter>
       </DialogContent>

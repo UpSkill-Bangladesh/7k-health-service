@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Users, MapPin } from "lucide-react";
 import { UserRole } from "@/contexts/AuthContext";
-import { format } from "date-fns";
+import { format, startOfWeek, addDays } from "date-fns";
 import ProviderSelector, { Provider } from "../ProviderSelector";
 import LocationSelector, { Location } from "../LocationSelector";
 import AppointmentTypeSelector, { AppointmentType } from "../AppointmentTypeSelector";
@@ -41,7 +41,6 @@ const AppointmentSidebar: React.FC<AppointmentSidebarProps> = ({
 }) => {
   const isAdmin = userRole === "admin";
   const isDoctor = userRole === "doctor";
-  const isPatient = userRole === "patient";
 
   // Ensure all arrays are properly initialized
   const safeProviders = Array.isArray(providers) ? providers : [];
@@ -81,12 +80,10 @@ const AppointmentSidebar: React.FC<AppointmentSidebarProps> = ({
         <CardHeader className="pb-3">
           <CardTitle className="text-lg font-medium flex items-center">
             <Users className="h-5 w-5 mr-2 text-healthcare-primary" />
-            {isPatient ? "Book Your Appointment" : "Appointment Options"}
+            Appointment Options
           </CardTitle>
           <CardDescription>
-            {isPatient ? "Select your preferences to find available slots" : 
-             isDoctor ? "Filter your appointments" :
-             "Configure appointment settings"}
+            {isDoctor ? "Filter your appointments" : "Configure appointment settings"}
           </CardDescription>
         </CardHeader>
         
@@ -104,7 +101,7 @@ const AppointmentSidebar: React.FC<AppointmentSidebarProps> = ({
           </div>
           
           {/* Location Selection */}
-          {(isAdmin || isPatient) && (
+          {isAdmin && (
             <div className="space-y-2">
               <Label htmlFor="location" className="font-medium">
                 Location
@@ -147,26 +144,8 @@ const AppointmentSidebar: React.FC<AppointmentSidebarProps> = ({
           </div>
         </CardContent>
       </Card>
-      
-      {/* Help Card for Patients */}
-      {isPatient && (
-        <Card className="bg-healthcare-primary/5 border-healthcare-primary/10">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Need Help?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              If you can't find a suitable appointment time or need special accommodations, 
-              please call our office at (555) 123-4567.
-            </p>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };
-
-// Add missing imports
-import { startOfWeek, addDays } from "date-fns";
 
 export default AppointmentSidebar;

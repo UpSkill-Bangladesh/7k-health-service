@@ -10,9 +10,7 @@ const Unauthorized = () => {
   const { user, logout } = useAuth();
 
   const handleGoBack = () => {
-    if (user?.role === 'patient') {
-      navigate('/patient-dashboard');
-    } else if (user?.role === 'doctor') {
+    if (user?.role === 'doctor') {
       navigate('/provider-dashboard');
     } else if (user?.role === 'admin') {
       navigate('/dashboard');

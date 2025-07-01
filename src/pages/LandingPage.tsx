@@ -25,9 +25,6 @@ const LandingPage: React.FC = () => {
         case "doctor":
           navigate("/provider-dashboard");
           break;
-        case "patient":
-          navigate("/patient-dashboard");
-          break;
         default:
           break;
       }

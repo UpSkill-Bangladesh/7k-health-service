@@ -56,7 +56,6 @@ const CalendarViewMain: React.FC<CalendarViewMainProps> = ({
   appointmentTypes,
   userRole
 }) => {
-  const isPatient = userRole === "patient";
   const isDoctor = userRole === "doctor";
   
   return (
@@ -70,7 +69,7 @@ const CalendarViewMain: React.FC<CalendarViewMainProps> = ({
         </CardTitle>
         <CardDescription>
           {selectedProvider 
-            ? `${isPatient ? "Select a date to see available times with " : ""}${providers.find(p => p.id === selectedProvider)?.name}` 
+            ? `Select a date to see available times with ${providers.find(p => p.id === selectedProvider)?.name}` 
             : "Please select a provider first"}
         </CardDescription>
       </CardHeader>
